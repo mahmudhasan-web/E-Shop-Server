@@ -6,7 +6,7 @@ require('dotenv').config()
 
 app.use(cors(
   {
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5173', 'http://localhost:5174'],
     credentials: true
   }
 ))
@@ -35,7 +35,15 @@ async function run() {
 
 
     app.get('/products', async (req, res) => {
-      const cursor = await productDB.find().toArray()
+      const id = Math.round(req.query.data)
+      console.log(id);
+      
+      const cursor = await productDB.find().skip(id).limit(4).toArray()
+      res.send(cursor)
+    })
+
+    app.get('/allproduct' , async(req,res)=>{
+      const cursor = await productDB.find().toArray() 
       res.send(cursor)
     })
 
